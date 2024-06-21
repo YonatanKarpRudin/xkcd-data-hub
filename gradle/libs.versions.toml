@@ -1,6 +1,5 @@
 [versions]
 coroutines = "1.8.1"
-exposed = "0.51.1"
 flyway = "10.15.0"
 hikari = "5.1.0"
 koin = "3.5.6"
@@ -12,6 +11,8 @@ mockk = "1.13.11"
 pitest = "1.15.0"
 postgres = "42.7.3"
 spotless = "6.25.0"
+jooq = "3.19.10"
+jooqDocker = "6.0.26"
 
 [libraries]
 
@@ -25,11 +26,8 @@ ktor_server_netty_jvm = { module = "io.ktor:ktor-server-netty", version.ref = "k
 ## DI
 koin = { module = "io.insert-koin:koin-ktor", version.ref = "koin" }
 
-## Exposed
-exposed_core = { module = "org.jetbrains.exposed:exposed-core", version.ref = "exposed" }
-exposed_dao = { module = "org.jetbrains.exposed:exposed-dao", version.ref = "exposed" }
-exposed_java_time = { module = "org.jetbrains.exposed:exposed-java-time", version.ref = "exposed" }
-exposed_jdbc = { module = "org.jetbrains.exposed:exposed-jdbc", version.ref = "exposed" }
+## JOOQ
+jooq = { module = "org.jooq:jooq", version.ref = "jooq" }
 
 ## Persistence
 flyway = { module = "org.flywaydb:flyway-database-postgresql", version.ref = "flyway" }
@@ -53,6 +51,7 @@ kotlin_serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 ktor = { id = "io.ktor.plugin", version.ref = "ktor" }
 pitest = { id = "info.solidsoft.pitest", version.ref = "pitest" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+jooq_docker = { id = "dev.monosoul.jooq-docker", version.ref = "jooqDocker" }
 
 [bundles]
 
@@ -65,10 +64,7 @@ ktor_all = [
 ]
 
 persistance_all = [
-    "exposed_core",
-    "exposed_dao",
-    "exposed_java_time",
-    "exposed_jdbc",
+    "jooq",
     "flyway",
     "hikari",
     "postgres_driver",
