@@ -1,32 +1,34 @@
 package com.xkcddatahub.fetcher.adapters.output.database.postgres
 
+import com.xkcddatahub.fetcher.adapters.output.database.postgres.jooq.tables.WebComics.Companion.WEB_COMICS
 import com.xkcddatahub.fetcher.application.ports.WebComicsPort
 import com.xkcddatahub.fetcher.entity.WebComics
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrElse
+import org.jooq.DSLContext
+import org.jooq.impl.DSL.max
 
-class WebComicPostgresAdapter : WebComicsPort {
-    override suspend fun save(comics: WebComics): Boolean = true
-//        dbQuery {
-//            val data = comics.toData()
-//            WebComicsTable.insert {
-//                it[id] = data.id
-//                it[year] = data.year
-//                it[month] = data.month
-//                it[day] = data.day
-//                it[title] = data.title
-//                it[safeTitle] = data.safeTitle
-//                it[transcript] = data.transcript
-//                it[alternativeText] = data.alternativeText
-//                it[imageUrl] = data.imageUrl
-//                it[news] = data.news
-//                it[link] = data.link
-//            }.insertedCount == 1
-//        }
+class WebComicPostgresAdapter(
+    private val jooq: DSLContext,
+) : WebComicsPort {
+    override suspend fun save(comics: WebComics): Boolean =
+        with(WEB_COMICS) {
+            jooq.insertInto(this)
+                .set(ID, comics.id)
+                .set(YEAR, comics.year)
+                .set(MONTH, comics.month)
+                .set(DAY, comics.day)
+                .set(TITLE, comics.title)
+                .set(SAFE_TITLE, comics.safeTitle)
+                .set(TRANSCRIPT, comics.transcript)
+                .set(ALTERNATIVE_TEXT, comics.alternativeText)
+                .set(IMAGE_URL, comics.imageUrl)
+                .set(NEWS, comics.news)
+                .set(LINK, comics.link)
+                .awaitFirstOrElse { 0 } == 1
+        }
 
-    override suspend fun getLatestStoredComicId(): Int = 1
-//        dbQuery {
-//            WebComicsTable
-//                .select(WebComicsTable.id.max())
-//                .single()[WebComicsTable.id.max()]
-//                ?: 0
-//        }
+    override suspend fun getLatestStoredComicId(): Int =
+        jooq.select(max(WEB_COMICS.ID))
+            .awaitFirst()?.get("id") as Int? ?: 0
 }

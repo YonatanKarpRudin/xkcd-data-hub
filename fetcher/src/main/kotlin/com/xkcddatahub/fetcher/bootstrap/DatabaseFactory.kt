@@ -35,11 +35,4 @@ class DatabaseFactory(config: ApplicationConfig) {
 
         return HikariDataSource(config)
     }
-
-    companion object {
-//        suspend fun <T> dbQuery(block: suspend () -> T): T =
-//            newSuspendedTransaction(
-//                Dispatchers.IO,
-//            ) { block() }
-    }
 }
