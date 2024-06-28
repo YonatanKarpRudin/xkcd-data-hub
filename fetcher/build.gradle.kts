@@ -19,4 +19,6 @@ dependencies {
     testImplementation(libs.koin.test)
     testImplementation(libs.bundles.tests.all)
     testImplementation(libs.bundles.persistance.test.all)
+    testImplementation("org.awaitility:awaitility-kotlin:4.2.0")
+    testImplementation("com.github.tomakehurst:wiremock:3.0.1")
 }
